@@ -1,0 +1,5 @@
+{
+  "middlewares": [
+    "middleware_json_server.js"
+  ]
+}

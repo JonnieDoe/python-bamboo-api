@@ -1,0 +1,241 @@
+{
+  "query_plan_reference": [
+    {
+      "id": "LIVE.json",
+      "results": {
+        "expand": "changes,metadata,plan,vcsRevisions,artifacts,comments,labels,jiraIssues,variables,stages",
+        "link": {
+          "href": "https://bamboo.com/rest/api/latest/result/TEST-XYZ-39",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "XYZ",
+          "shortKey": "XYZ",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://bamboo.com/rest/api/latest/plan/TEST-XYZ",
+            "rel": "self"
+          },
+          "key": "TEST-XYZ",
+          "name": "TEST - XYZ",
+          "planKey": {
+            "key": "TEST-XYZ"
+          }
+        },
+        "planName": "XYZ",
+        "projectName": "TEST",
+        "buildResultKey": "TEST-XYZ-39",
+        "lifeCycleState": "Finished",
+        "id": 142998616,
+        "buildStartedTime": "2020-01-07T18:33:19.315+01:00",
+        "prettyBuildStartedTime": "Tue, 7 Jan, 06:33 PM",
+        "buildCompletedTime": "2020-01-07T18:43:14.943+01:00",
+        "buildCompletedDate": "2020-01-07T18:43:14.943+01:00",
+        "prettyBuildCompletedTime": "Tue, 7 Jan, 06:43 PM",
+        "buildDurationInSeconds": 595,
+        "buildDuration": 595628,
+        "buildDurationDescription": "9 minutes",
+        "buildRelativeTime": "1 day ago",
+        "vcsRevisionKey": "8abca4e5341b6b93c58ae1d253fc9bd80283b1f8",
+        "vcsRevisions": {
+          "size": 3,
+          "start-index": 0,
+          "max-result": 3
+        },
+        "buildTestSummary": "No tests found",
+        "successfulTestCount": 0,
+        "failedTestCount": 0,
+        "quarantinedTestCount": 0,
+        "skippedTestCount": 0,
+        "continuable": false,
+        "onceOff": false,
+        "restartable": true,
+        "notRunYet": false,
+        "finished": true,
+        "successful": false,
+        "buildReason": "Manual run by <a href='https://bamboo.com/browse/user/YYY'>Service Account</a>",
+        "reasonSummary": "Manual run by <a href='https://bamboo.com/browse/user/YYY'>Service Account</a>",
+        "artifacts": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "comments": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "labels": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "jiraIssues": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "variables": {
+          "size": 69,
+          "start-index": 0,
+          "max-result": 69
+        },
+        "stages": {
+          "size": 5,
+          "start-index": 0,
+          "max-result": 5
+        },
+        "changes": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "metadata": {
+          "size": 6,
+          "start-index": 0,
+          "max-result": 6
+        },
+        "key": "TEST-XYZ-39",
+        "planResultKey": {
+          "key": "TEST-XYZ-39",
+          "entityKey": {
+            "key": "TEST-XYZ"
+          },
+          "resultNumber": 39
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 39,
+        "buildNumber": 39
+      }
+    },
+    {
+      "id": "TEST-123.json",
+      "results": {
+        "expand": "changes,metadata,plan,vcsRevisions,artifacts,comments,labels,jiraIssues,variables,stages",
+        "link": {
+          "href": "https://bamboo.com/rest/api/latest/result/TEST-XYZ-39",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "XYZ",
+          "shortKey": "XYZ",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://bamboo.com/rest/api/latest/plan/TEST-XYZ",
+            "rel": "self"
+          },
+          "key": "TEST-XYZ",
+          "name": "TEST - XYZ",
+          "planKey": {
+            "key": "TEST-XYZ"
+          }
+        },
+        "planName": "XYZ",
+        "projectName": "TEST",
+        "buildResultKey": "TEST-XYZ-39",
+        "lifeCycleState": "Finished",
+        "id": 142998616,
+        "buildStartedTime": "2020-01-07T18:33:19.315+01:00",
+        "prettyBuildStartedTime": "Tue, 7 Jan, 06:33 PM",
+        "buildCompletedTime": "2020-01-07T18:43:14.943+01:00",
+        "buildCompletedDate": "2020-01-07T18:43:14.943+01:00",
+        "prettyBuildCompletedTime": "Tue, 7 Jan, 06:43 PM",
+        "buildDurationInSeconds": 595,
+        "buildDuration": 595628,
+        "buildDurationDescription": "9 minutes",
+        "buildRelativeTime": "1 day ago",
+        "vcsRevisionKey": "8abca4e5341b6b93c58ae1d253fc9bd80283b1f8",
+        "vcsRevisions": {
+          "size": 3,
+          "start-index": 0,
+          "max-result": 3
+        },
+        "buildTestSummary": "No tests found",
+        "successfulTestCount": 0,
+        "failedTestCount": 0,
+        "quarantinedTestCount": 0,
+        "skippedTestCount": 0,
+        "continuable": false,
+        "onceOff": false,
+        "restartable": true,
+        "notRunYet": false,
+        "finished": true,
+        "successful": false,
+        "buildReason": "Manual run by <a href='https://bamboo.com/browse/user/YYY'>Service Account</a>",
+        "reasonSummary": "Manual run by <a href='https://bamboo.com/browse/user/YYY'>Service Account</a>",
+        "artifacts": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "comments": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "labels": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "jiraIssues": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "variables": {
+          "size": 69,
+          "start-index": 0,
+          "max-result": 69
+        },
+        "stages": {
+          "size": 5,
+          "start-index": 0,
+          "max-result": 5
+        },
+        "changes": {
+          "size": 0,
+          "start-index": 0,
+          "max-result": 0
+        },
+        "metadata": {
+          "size": 6,
+          "start-index": 0,
+          "max-result": 6
+        },
+        "key": "TEST-XYZ-39",
+        "planResultKey": {
+          "key": "TEST-XYZ-39",
+          "entityKey": {
+            "key": "TEST-XYZ"
+          },
+          "resultNumber": 39
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 39,
+        "buildNumber": 39
+      }
+    }
+  ],
+  "stop_build": [
+    {
+    }
+  ],
+  "trigger_a_build": [
+    {
+      "id": "TEST.json",
+      "planKey": "TEST-12",
+      "buildNumber": 12,
+      "buildResultKey": "TEST-12",
+      "triggerReason": "Manual build",
+      "link": {
+        "href": "https://bamboo.com/rest/api/latest/result/TEST-12",
+        "rel": "self"
+      }
+    }
+  ]
+}

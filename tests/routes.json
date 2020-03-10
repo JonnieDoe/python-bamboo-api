@@ -1,0 +1,9 @@
+{
+  "/rest/api/latest/queue/:id": "/trigger_a_build/:id",
+  "/rest/api/latest/result/": "/query_plan_reference/",
+  "/rest/api/latest/result/:id": "/query_plan_reference/:id",
+  "/rest/api/latest/result\\?max-results=:id": "/query_plan_reference/",
+  "/rest/api/latest/result/:id\\?max-results=:val": "/query_plan_reference/:id",
+  "/build/admin/stopPlan.action?planResultKey=:id": "/stop_build",
+  "/browse/:id/artifact/:val/:val": "/assets/html/artifacts.html"
+}

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "python-bamboo-api"
+version = "1.0.0"
+description = "BambooAPI REST"
+authors = ["Jonnie Doe <jonnie@doe.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.22.0"
+bs4 = "^0.0.1"
+configparser = "^4.0.2"
+psutil = "^5.7.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3.5"
+flake8 = "^3.7.9"
+isort = "^4.3.21"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
