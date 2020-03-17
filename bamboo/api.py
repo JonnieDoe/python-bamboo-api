@@ -13,7 +13,11 @@ from bs4 import BeautifulSoup
 from requests.auth import HTTPBasicAuth
 
 # Add custom packages
-from bamboo.config import BAMBOO_PASS, BAMBOO_USER
+from bamboo.config import (
+    BAMBOO_PASS,
+    BAMBOO_USER,
+    LOGGER
+)
 from bamboo.requests_utils import TimeoutHTTPAdapter
 from bamboo.validation import Validation
 
@@ -69,7 +73,7 @@ class BambooAccount(metaclass=ABCMeta):
     @staticmethod
     def __load_credentials() -> tuple:
         if not all([BAMBOO_USER and BAMBOO_PASS]):
-            print(
+            LOGGER.warning(
                 "No credentials found while initializing the module! Please ensure you set them in explicitly!"
             )
             return None, None
@@ -259,10 +263,10 @@ class BambooAPIClient(BambooAccount):
         except (
             requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError,
             requests.RequestException, requests.Timeout
-        ) as exc_value:
-            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exc_value}")
-        except Exception as exc_value:
-            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exc_value}")
+        ) as exception:
+            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exception}")
+        except Exception as exception:
+            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}")
 
         return response
 
@@ -288,10 +292,10 @@ class BambooAPIClient(BambooAccount):
         except (
             requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError,
             requests.RequestException, requests.Timeout
-        ) as exc_value:
-            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exc_value}")
-        except Exception as exc_value:
-            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exc_value}")
+        ) as exception:
+            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exception}")
+        except Exception as exception:
+            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}")
 
         return response
 
@@ -331,7 +335,7 @@ class BambooAPIClient(BambooAccount):
         url = self.trigger_plan_url_mask.format(server_url=server_url)
         url = f"{url}{plan_key}.json"
         if self.verbose:
-            print(f"URL used to trigger build: '{url}'")
+            LOGGER.debug(f"URL used to trigger build: '{url}'")
 
         # Trigger the build by performing a HTTP POST request and check HTTP response code
         http_post_response = self.post_request(url=url, data=json.dumps(request_payload))
@@ -344,10 +348,10 @@ class BambooAPIClient(BambooAccount):
             # Get the JSON reply from the web page
             http_post_response.encoding = "utf-8"
             response_json = http_post_response.json()
-        except ValueError as exc_value:
-            raise ValueError(f"Error decoding JSON: {exc_value}")
-        except Exception as exc_value:
-            raise Exception(f"Unknown error: {exc_value}")
+        except ValueError as exception:
+            raise ValueError(f"Error decoding JSON: {exception}")
+        except Exception as exception:
+            raise Exception(f"Unknown error: {exception}")
 
         # Send response to client
         return self.pack_response_to_client(
@@ -374,11 +378,10 @@ class BambooAPIClient(BambooAccount):
         url = f"{url}?planResultKey={plan_build_key}"
 
         if self.verbose:
-            print(f"URL used to stop plan: '{url}'")
+            LOGGER.debug(f"URL used to stop plan: '{url}'")
 
         # Stop a build by performing a HTTP POST request and check HTTP response code
         http_post_response = self.post_request(url=url)
-        print(http_post_response.status_code)
         if http_post_response.status_code not in [200, 302]:
             return self.pack_response_to_client(
                 response=False, status_code=http_post_response.status_code, content=http_post_response.text, url=url
@@ -407,7 +410,7 @@ class BambooAPIClient(BambooAccount):
         url = f"{url}{plan_key}.json?max-results=10000"
 
         if self.verbose:
-            print(f"URL used in query: '{url}'")
+            LOGGER.debug(f"URL used in query: '{url}'")
 
         # Query a build by performing a HTTP GET request and check HTTP response code
         http_get_response = self.get_request(url=url)
@@ -420,10 +423,10 @@ class BambooAPIClient(BambooAccount):
             # Get the JSON reply from the web page
             http_get_response.encoding = "utf-8"
             response_json = http_get_response.json()
-        except ValueError as exc_value:
-            raise ValueError(f"Error decoding JSON: {exc_value}")
-        except Exception as exc_value:
-            raise Exception(f"Unknown error: {exc_value}")
+        except ValueError as exception:
+            raise ValueError(f"Error decoding JSON: {exception}")
+        except Exception as exception:
+            raise Exception(f"Unknown error: {exception}")
 
         # Send response to client
         return self.pack_response_to_client(
@@ -465,7 +468,7 @@ class BambooAPIClient(BambooAccount):
             )
 
             if self.verbose:
-                print(f"URL used to query for artifacts: '{url}'")
+                LOGGER.debug(f"URL used to query for artifacts: '{url}'")
 
             # Query a build by performing a HTTP GET request and check HTTP response code
             http_get_response = self.get_request(url=url)
@@ -486,10 +489,10 @@ class BambooAPIClient(BambooAccount):
                     # Do not add HREF value in case PAGE NOT FOUND error
                     if file_name != "Site homepage":
                         artifacts[file_name] = f"{server_url}{file_path}"
-            except ValueError as exc_value:
-                raise ValueError(f"Error when downloading artifact: {exc_value}")
-            except Exception as exc_value:
-                raise Exception(f"Unknown error when downloading artifact: {exc_value}")
+            except ValueError as exception:
+                raise ValueError(f"Error when downloading artifact: {exception}")
+            except Exception as exception:
+                raise Exception(f"Unknown error when downloading artifact: {exception}")
 
         http_return_code = 200
         if http_failed_conn_counter == len(artifact_names):
@@ -516,7 +519,7 @@ class BambooAPIClient(BambooAccount):
             return {'content': "Incorrect input provided!"}
 
         if self.verbose:
-            print(f"URL used to download artifact: '{url}'")
+            LOGGER.debug(f"URL used to download artifact: '{url}'")
 
         # Query a build by performing a HTTP GET request and check HTTP response code
         http_get_response = self.get_request(url=url)
@@ -530,10 +533,10 @@ class BambooAPIClient(BambooAccount):
 
             with open(destination_file, 'wb') as f:
                 f.write(get_file.content)
-        except ValueError as exc_value:
-            raise ValueError(f"Error when downloading artifact: {exc_value}")
-        except Exception as exc_value:
-            raise Exception(f"Unknown error when downloading artifact: {exc_value}")
+        except ValueError as exception:
+            raise ValueError(f"Error when downloading artifact: {exception}")
+        except Exception as exception:
+            raise Exception(f"Unknown error when downloading artifact: {exception}")
 
         # Send response to client
         return self.pack_response_to_client(
