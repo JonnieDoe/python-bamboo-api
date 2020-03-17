@@ -20,7 +20,7 @@ DEFAULT_TIMEOUT = 5  # seconds
 class TimeoutHTTPAdapter(HTTPAdapter):
     """Custom timeout adapter."""
 
-    def __init__(self, max_retries=RETRY_STRATEGY, *args, **kwargs):
+    def __init__(self, *args, max_retries=RETRY_STRATEGY, **kwargs):
         """CTOR."""
 
         self.timeout = DEFAULT_TIMEOUT

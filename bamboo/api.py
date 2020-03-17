@@ -18,15 +18,20 @@ from bamboo.config import (
     BAMBOO_USER,
     LOGGER
 )
+from bamboo.exceptions import (
+    DownloadErrorException,
+    EncodingJSONException,
+    HTTPErrorException
+)
 from bamboo.requests_utils import TimeoutHTTPAdapter
 from bamboo.validation import Validation
 
 
 # Mount it for both http and https usage
-adapter = TimeoutHTTPAdapter(timeout=2.5)
-http = requests.Session()
-http.mount("https://", adapter)
-http.mount("http://", adapter)
+ADAPTER = TimeoutHTTPAdapter(timeout=2.5)
+HTTP = requests.Session()
+HTTP.mount("https://", ADAPTER)
+HTTP.mount("http://", ADAPTER)
 
 LINE_SEP = os.linesep
 
@@ -237,6 +242,7 @@ class BambooAPIClient(BambooAccount):
         :param values_to_pack: Values to pack in the response dictionary
         :return: A dict
         """
+
         response = dict()
         for key, value in values_to_pack.items():
             response[key] = value
@@ -248,14 +254,16 @@ class BambooAPIClient(BambooAccount):
 
         :param values_to_unpack: Values to un-pack in order to construct the HTTP Get request
         :return: A requests response object
+        :raise: Custom exception on HTTP communication errors
         """
+
         url = values_to_unpack.get('url', "")
         headers = values_to_unpack.get('header', "") or self.http_header
         timeout = values_to_unpack.get('timeout', 60)
         allow_redirects = values_to_unpack.get('allow_redirects', False)
 
         try:
-            response = http.get(url=url,
+            response = HTTP.get(url=url,
                                 auth=self.auth,
                                 headers=headers,
                                 timeout=timeout,
@@ -264,9 +272,15 @@ class BambooAPIClient(BambooAccount):
             requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError,
             requests.RequestException, requests.Timeout
         ) as exception:
-            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exception}")
+            error_message = f"Error when requesting URL: '{url}'{LINE_SEP}{exception}"
+            LOGGER.error(error_message)
+            exception = HTTPErrorException(error_message=error_message)
+            raise exception
         except Exception as exception:
-            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}")
+            error_message = f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}"
+            LOGGER.error(error_message)
+            exception = HTTPErrorException(error_message=error_message)
+            raise exception
 
         return response
 
@@ -275,7 +289,9 @@ class BambooAPIClient(BambooAccount):
 
         :param values_to_unpack: Values to un-pack in order to construct the HTTP POST request
         :return: A requests response object
+        :raise: Custom exception on HTTP communication errors
         """
+
         url = values_to_unpack.get('url', "")
         headers = values_to_unpack.get('header', "") or self.http_header
         data = values_to_unpack.get('data', {})
@@ -283,7 +299,7 @@ class BambooAPIClient(BambooAccount):
         allow_redirects = values_to_unpack.get('allow_redirects', False)
 
         try:
-            response = http.post(url=url,
+            response = HTTP.post(url=url,
                                  auth=self.auth,
                                  headers=headers,
                                  data=data,
@@ -293,9 +309,15 @@ class BambooAPIClient(BambooAccount):
             requests.ConnectionError, requests.ConnectTimeout, requests.HTTPError,
             requests.RequestException, requests.Timeout
         ) as exception:
-            raise ValueError(f"Error when requesting URL: '{url}'{LINE_SEP}{exception}")
+            error_message = f"Error when requesting URL: '{url}'{LINE_SEP}{exception}"
+            LOGGER.error(error_message)
+            exception = HTTPErrorException(error_message=error_message)
+            raise exception
         except Exception as exception:
-            raise Exception(f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}")
+            error_message = f"Unknown error when requesting URL: '{url}'{LINE_SEP}{exception}"
+            LOGGER.error(error_message)
+            exception = HTTPErrorException(error_message=error_message)
+            raise exception
 
         return response
 
@@ -309,7 +331,7 @@ class BambooAPIClient(BambooAccount):
         :param plan_key: Bamboo plan key [str]
         :param req_values: Values to insert into request (tuple)
         :return: A dictionary containing HTTP status_code and request content
-        :raise: Exception, ValueError on Errors
+        :raise: Custom exception on JSON encoding error
         """
 
         server_url = server_url or self.server_url
@@ -349,9 +371,15 @@ class BambooAPIClient(BambooAccount):
             http_post_response.encoding = "utf-8"
             response_json = http_post_response.json()
         except ValueError as exception:
-            raise ValueError(f"Error decoding JSON: {exception}")
+            error_message = f"Error encoding to JSON: {exception}"
+            LOGGER.error(error_message)
+            exception = EncodingJSONException(error_message=error_message)
+            raise exception
         except Exception as exception:
-            raise Exception(f"Unknown error: {exception}")
+            error_message = f"Unknown error when trying to return json-encoded content: {exception}"
+            LOGGER.error(error_message)
+            exception = EncodingJSONException(error_message=error_message)
+            raise exception
 
         # Send response to client
         return self.pack_response_to_client(
@@ -369,7 +397,6 @@ class BambooAPIClient(BambooAccount):
         Optional. Use this if you have a cluster of Bamboo servers and need to swap between servers.
         :param plan_build_key: Bamboo plan build key [str]
         :return: A dictionary containing HTTP status_code and request content
-        :raise: Exception, ValueError on errors
         """
 
         server_url = server_url or self.server_url
@@ -400,7 +427,7 @@ class BambooAPIClient(BambooAccount):
         Optional. Use this if you have a cluster of Bamboo servers and need to swap between servers.
         :param plan_key: Bamboo plan key [str]
         :return: A dictionary containing HTTP status_code and request content
-        :raise: Exception, ValueError on errors
+        :raise: Custom exception on JSON encoding error
         """
 
         server_url = server_url or self.server_url
@@ -424,9 +451,15 @@ class BambooAPIClient(BambooAccount):
             http_get_response.encoding = "utf-8"
             response_json = http_get_response.json()
         except ValueError as exception:
-            raise ValueError(f"Error decoding JSON: {exception}")
+            error_message = f"Error encoding to JSON: {exception}"
+            LOGGER.error(error_message)
+            exception = EncodingJSONException(error_message=error_message)
+            raise exception
         except Exception as exception:
-            raise Exception(f"Unknown error: {exception}")
+            error_message = f"Unknown error when trying to return json-encoded content: {exception}"
+            LOGGER.error(error_message)
+            exception = EncodingJSONException(error_message=error_message)
+            raise exception
 
         # Send response to client
         return self.pack_response_to_client(
@@ -450,7 +483,7 @@ class BambooAPIClient(BambooAccount):
         :param job_name: Bamboo plan job name [str]
         :param artifact_names: Names of the artifacts as in Bamboo plan stage job [tuple]
         :return: A dictionary containing HTTP status_code, request content and list of artifacts
-        :raise: Exception, ValueError on Errors
+        :raise: Custom exception on download error
         """
 
         server_url = server_url or self.server_url
@@ -490,9 +523,15 @@ class BambooAPIClient(BambooAccount):
                     if file_name != "Site homepage":
                         artifacts[file_name] = f"{server_url}{file_path}"
             except ValueError as exception:
-                raise ValueError(f"Error when downloading artifact: {exception}")
+                error_message = f"Error when downloading artifact: {exception}"
+                LOGGER.error(error_message)
+                exception = DownloadErrorException(error_message=error_message)
+                raise exception
             except Exception as exception:
-                raise Exception(f"Unknown error when downloading artifact: {exception}")
+                error_message = f"Unknown error when downloading artifact: {exception}"
+                LOGGER.error(error_message)
+                exception = DownloadErrorException(error_message=error_message)
+                raise exception
 
         http_return_code = 200
         if http_failed_conn_counter == len(artifact_names):
@@ -512,7 +551,7 @@ class BambooAPIClient(BambooAccount):
         :param url: URL used in to download the artifact [str]
         :param destination_file: Full path to destination file [str]
         :return: A dictionary containing HTTP status_code and request content
-        :raise: Exception, ValueError on Errors
+        :raise: Custom exception on download error
         """
 
         if not url or not destination_file:
@@ -534,9 +573,15 @@ class BambooAPIClient(BambooAccount):
             with open(destination_file, 'wb') as f:
                 f.write(get_file.content)
         except ValueError as exception:
-            raise ValueError(f"Error when downloading artifact: {exception}")
+            error_message = f"Error when downloading artifact: {exception}"
+            LOGGER.error(error_message)
+            exception = DownloadErrorException(error_message=error_message)
+            raise exception
         except Exception as exception:
-            raise Exception(f"Unknown error when downloading artifact: {exception}")
+            error_message = f"Unknown error when downloading artifact: {exception}"
+            LOGGER.error(error_message)
+            exception = DownloadErrorException(error_message=error_message)
+            raise exception
 
         # Send response to client
         return self.pack_response_to_client(
