@@ -7,10 +7,6 @@
 class HTTPErrorException(Exception):
     """Custom exception for HTTP requests."""
 
-    message: str
-
-    __slots__ = ('message',)
-
     def __init__(self, error_message: str) -> None:
         """CTOR.
         :param error_message: Error message to return
@@ -21,10 +17,6 @@ class HTTPErrorException(Exception):
 class EncodingJSONException(Exception):
     """Custom exception for JSON encoding errors."""
 
-    message: str
-
-    __slots__ = ('message',)
-
     def __init__(self, error_message: str) -> None:
         """CTOR.
         :param error_message: Error message to return
@@ -34,10 +26,6 @@ class EncodingJSONException(Exception):
 
 class DownloadErrorException(Exception):
     """Custom exception for Web downloading errors."""
-
-    message: str
-
-    __slots__ = ('message',)
 
     def __init__(self, error_message: str) -> None:
         """CTOR.
