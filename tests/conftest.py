@@ -12,7 +12,7 @@ import subprocess
 import time
 
 # Add custom packages
-from bamboo.api import BambooAPIClient
+from bamboo import BambooAPIClient
 
 
 # Current working dir
