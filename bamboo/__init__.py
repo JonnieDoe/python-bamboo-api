@@ -9,3 +9,8 @@ __mail__ = "david.cristian.paraschivescu@gmail.com"
 __version__ = "1.0.0"
 
 from .api import BambooAPIClient
+
+
+__all__ = [
+    'BambooAPIClient'
+]
